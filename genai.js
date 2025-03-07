@@ -48,7 +48,7 @@ const taskConfigs = {
         name: 'summarization',
         model: 'Xenova/distilbart-cnn-6-6',
         description: 'Creates a concise summary of a longer text.',
-        sampleInput: 'The United States of America, founded in 1776, is a federal republic...',
+        sampleInput: 'The United States of America, founded in 1776, is a federal republic composed of 50 states, a capital district (Washington, D.C.), and several territories. It operates under a system of democracy with a constitution that establishes a separation of powers among the executive, legislative, and judicial branches of government. The country has played a significant role in global politics, economics, and culture, emerging as one of the worlds most influential nations.Known for its diverse population, the U.S.is a melting pot of cultures, traditions, and languages, shaped by immigration and historical developments.It boasts a strong economy driven by industries such as technology, finance, healthcare, and entertainment.Additionally, the U.S.is home to some of the most prestigious educational institutions and research centers, contributing to innovation and scientific advancements.With vast geographical landscapes ranging from bustling urban centers to breathtaking natural wonders, the nation remains a global leader in various fields, including space exploration, military power, and human rights advocacy.',
         code: 'const result = await pipeline("summarization")("INPUT_TEXT", { max_length: 100 });'
     },
     'translate': {
@@ -226,5 +226,36 @@ function clearResults() {
     }
 }
 
+/* 
+    Function: displayNERResults()
+    - Function to display NER Results.
+*/
+function displayNERResults(results) {
+    if (!taskResult) return;
+
+    const table = `
+        <table>
+            <thead>
+                <tr>
+                    <th>Entity</th>
+                    <th>Score</th>
+                    <th>Index</th>
+                    <th>Word</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${results.map(item => `
+                    <tr>
+                        <td>${item.entity}</td>
+                        <td>${(item.score * 100).toFixed(2)}%</td>
+                        <td>${item.index}</td>
+                        <td>${item.word}</td>
+                    </tr>
+                `).join('')}
+            </tbody>
+        </table>
+    `;
+    taskResult.innerHTML = table;
+}
 // Initialize script when the DOM is loaded
 document.addEventListener('DOMContentLoaded', initialize);
